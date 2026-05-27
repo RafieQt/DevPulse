@@ -1,6 +1,7 @@
 import express from "express";
 import { initDB } from "./db";
-const app = express();
+import app from "./app";
+
 const port = 5000;
 
 const main = () => {
