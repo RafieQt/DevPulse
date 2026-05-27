@@ -4,8 +4,9 @@ import { issueService } from "./issue.service";
 
 
 const createIssue = async (req: Request, res: Response) => {
+    
   try {
-    const result = await issueService.CreateIssueBD(req.body);
+    const result = await issueService.CreateIssueBD(req.body, req.user);
     
   } catch (error) {
     console.log(error)
