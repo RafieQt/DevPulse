@@ -7,6 +7,7 @@ dotenv.config({
 
 const config = {
   neon_string: process.env.NEON_STRING,
+  jwtSecret: process.env.JWT_SECRET
 };
 
 export default config;

@@ -22,6 +22,27 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
+const loginUser = async(req: Request, res:Response)=>{
+    
+    try {
+    const result = await authService.loginUserDB(req.body);
+    sendResponse(res, {
+      statusCode: 201,
+      success: true,
+      message: "User Exists!",
+      data: result,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+}
+
 export const authController = {
   createUser,
+  loginUser
 };

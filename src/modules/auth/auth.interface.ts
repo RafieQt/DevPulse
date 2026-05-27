@@ -11,3 +11,8 @@ export interface Iuser{
     password: string,
     role?: string
 }
+
+export type TLogin ={
+    email : string,
+    password: string
+}
