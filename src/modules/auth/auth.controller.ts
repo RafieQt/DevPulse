@@ -22,9 +22,8 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
-const loginUser = async(req: Request, res:Response)=>{
-    
-    try {
+const loginUser = async (req: Request, res: Response) => {
+  try {
     const result = await authService.loginUserDB(req.body);
     sendResponse(res, {
       statusCode: 201,
@@ -40,9 +39,9 @@ const loginUser = async(req: Request, res:Response)=>{
       error: error,
     });
   }
-}
+};
 
 export const authController = {
   createUser,
-  loginUser
+  loginUser,
 };

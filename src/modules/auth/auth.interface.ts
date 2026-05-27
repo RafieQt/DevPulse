@@ -16,3 +16,9 @@ export type TLogin ={
     email : string,
     password: string
 }
+
+export type TIssue = {
+    title: string,
+    description: string,
+    type: string
+}

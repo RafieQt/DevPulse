@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { pool } from "../../db";
-import type { Iuser, TLogin } from "./auth.interface";
+import type { Iuser, TIssue, TLogin } from "./auth.interface";
 import jwt from "jsonwebtoken";
 import config from "../../config";
 
@@ -17,6 +17,8 @@ const createUserIntoDB = async (payload: Iuser) => {
   delete result.rows[0].password;
   return result;
 };
+
+
 
 const loginUserDB = async (payload: TLogin) => {
   const { email, password } = payload;
@@ -37,8 +39,8 @@ const loginUserDB = async (payload: TLogin) => {
   }
 
   const jwtPayload = {
+    id: user.id,
     email: user.email,
-    password: password,
     role: user.role,
   };
   console.log(jwtPayload);
@@ -48,10 +50,17 @@ const loginUserDB = async (payload: TLogin) => {
   });
 
   delete user.password;
-  return { accessToken, user};
+  return { accessToken, user };
 };
+
+
+
+
+
+
 
 export const authService = {
   createUserIntoDB,
   loginUserDB,
+
 };
