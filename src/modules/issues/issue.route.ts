@@ -8,6 +8,7 @@ const router = Router();
 
 
 router.post('/',auth("maintainer", "contributor"), issueController.createIssue);
+router.get('/', issueController.getAllIssues);
 
 
 

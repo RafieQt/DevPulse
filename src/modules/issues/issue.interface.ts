@@ -5,3 +5,9 @@ export type TDecodedUser = {
   iat: number;
   exp: number;
 };
+
+export interface TIssueQuery {
+  sort?: string;
+  type?: string;
+  status?: string;
+}
