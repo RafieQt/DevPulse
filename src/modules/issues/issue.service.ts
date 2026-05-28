@@ -136,14 +136,53 @@ const getSingleIssueDB = async (id: Number) => {
   return finalData;
 };
 
-const updateIssueDB = async (payload: updateData) => {
+const updateIssueDB = async (
+  issueId: number,
+  payload: updateData,
+  user: TDecodedUser,
+) => {
   const { title, description, type } = payload;
+
+  const { id, role } = user;
+
+  const issueData = await pool.query(
+    `
+    SELECT *
+    FROM issues
+    WHERE id = $1
+    `,
+    [issueId],
+  );
+
+  const issue = issueData.rows[0];
+
+  if (!issue) {
+    throw new Error("Issue not found");
+  }
+
+  // contributor restrictions only
+  if (role === "contributor") {
+    if (issue.reporter_id !== id) {
+      throw new Error("Unauthorized Access!");
+    }
+
+    if (issue.status !== "open") {
+      throw new Error("Issue is closed!");
+    }
+  }
 
   const result = await pool.query(
     `
-        UPDATE issues SET title=COALESCE($1,title), description=COALESCE($2,description), type=COALESCE($3,type) RETURNING *
-        `,
-    [title, description, type],
+    UPDATE issues
+    SET
+      title = COALESCE($1, title),
+      description = COALESCE($2, description),
+      type = COALESCE($3, type),
+      updated_at = CURRENT_TIMESTAMP
+    WHERE id = $4
+    RETURNING *
+    `,
+    [title, description, type, issueId],
   );
 
   return result;

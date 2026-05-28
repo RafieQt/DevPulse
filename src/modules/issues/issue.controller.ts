@@ -77,9 +77,9 @@ const getSingleIssue = async (req: Request, res: Response) => {
 
   
 const updateIssue = async(req: Request, res: Response)=>{
-
+const issueId = Number(req.params.id);
   try {
-    const result = await issueService.updateIssueDB(req.body);
+    const result = await issueService.updateIssueDB(issueId, req.body, req.user);
 
     sendResponse(res, {
       statusCode: 200,
