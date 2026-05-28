@@ -1,6 +1,6 @@
 import { pool } from "../../db";
 import type { TIssue } from "../auth/auth.interface";
-import type { TDecodedUser, TIssueQuery } from "./issue.interface";
+import type { TDecodedUser, TIssueQuery, updateData } from "./issue.interface";
 
 const CreateIssueBD = async (payload: TIssue, user: TDecodedUser) => {
   const { title, description, type, status } = payload;
@@ -124,20 +124,34 @@ const getSingleIssueDB = async (id: Number) => {
     status: issue.status,
 
     reporter: {
-        "id": reporter.id,
-        "name": reporter.name,
-        "role": reporter.role
+      id: reporter.id,
+      name: reporter.name,
+      role: reporter.role,
     },
 
     created_at: issue.created_at,
     updated_at: issue.updated_at,
-  }
+  };
 
   return finalData;
+};
+
+const updateIssueDB = async (payload: updateData) => {
+  const { title, description, type } = payload;
+
+  const result = await pool.query(
+    `
+        UPDATE issues SET title=COALESCE($1,title), description=COALESCE($2,description), type=COALESCE($3,type) RETURNING *
+        `,
+    [title, description, type],
+  );
+
+  return result;
 };
 
 export const issueService = {
   CreateIssueBD,
   getAllIssuesDB,
   getSingleIssueDB,
+  updateIssueDB,
 };

@@ -11,3 +11,9 @@ export interface TIssueQuery {
   type?: string;
   status?: string;
 }
+
+export type updateData = {
+  title?: string,
+  description?: string,
+  type?: string
+}
