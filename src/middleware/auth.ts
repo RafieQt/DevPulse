@@ -3,6 +3,7 @@ import sendResponse from "../utils/sendResponse";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import { pool } from "../db";
+import type { TDecodedUser } from "../modules/issues/issue.interface";
 
 type ROLES = "maintainer" | "contributor";
 const auth = (...roles: ROLES[]) => {
@@ -20,7 +21,7 @@ const auth = (...roles: ROLES[]) => {
       const decode = jwt.verify(
         token as string,
         config.jwtSecret as string,
-      ) as JwtPayload;
+      ) as TDecodedUser;
       console.log("decided ", decode);
 
       const userData = await pool.query(
