@@ -11,6 +11,7 @@ router.post('/', auth("maintainer", "contributor"), issueController.createIssue)
 router.get('/', issueController.getAllIssues);
 router.get('/:id', issueController.getSingleIssue);
 router.patch('/:id', auth("maintainer", "contributor"), issueController.updateIssue);
+router.delete('/:id', auth("maintainer"), issueController.deleteIssue);
 
 
 

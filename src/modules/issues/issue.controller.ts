@@ -56,14 +56,13 @@ const getSingleIssue = async (req: Request, res: Response) => {
 
   try {
     const result = await issueService.getSingleIssueDB(id as number);
-  sendResponse(res, {
+    sendResponse(res, {
       statusCode: 200,
       success: true,
       message: "Issue retrived successfully",
       data: result,
     });
   } catch (error: any) {
-    
     sendResponse(res, {
       statusCode: 500,
       success: false,
@@ -71,15 +70,16 @@ const getSingleIssue = async (req: Request, res: Response) => {
       error: error,
     });
   }
-
-
 };
 
-  
-const updateIssue = async(req: Request, res: Response)=>{
-const issueId = Number(req.params.id);
+const updateIssue = async (req: Request, res: Response) => {
+  const issueId = Number(req.params.id);
   try {
-    const result = await issueService.updateIssueDB(issueId, req.body, req.user);
+    const result = await issueService.updateIssueDB(
+      issueId,
+      req.body,
+      req.user,
+    );
 
     sendResponse(res, {
       statusCode: 200,
@@ -94,14 +94,33 @@ const issueId = Number(req.params.id);
       message: error.message,
       error: error,
     });
-    
   }
+};
 
-}
+const deleteIssue = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    const result = await issueService.deleteIssueDB(id as number);
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Issue deleted successfully",
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
 
 export const issueController = {
   createIssue,
   getAllIssues,
   getSingleIssue,
-  updateIssue
+  updateIssue,
+  deleteIssue,
 };

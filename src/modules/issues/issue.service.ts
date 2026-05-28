@@ -188,9 +188,28 @@ const updateIssueDB = async (
   return result;
 };
 
+
+const deleteIssueDB= async(id: number)=>{
+
+    const issueData = await pool.query(`
+        SELECT * FROM issues WHERE id=$1
+        `,[id]);
+
+        if(issueData.rows.length===0){
+            throw new Error("The Issue Does not exists!");
+        }
+
+    const result = await pool.query(`
+        DELETE FROM issues WHERE id=$1 RETURNING *
+        `,[id]);
+
+        return result;
+}
+
 export const issueService = {
   CreateIssueBD,
   getAllIssuesDB,
   getSingleIssueDB,
   updateIssueDB,
+  deleteIssueDB
 };
