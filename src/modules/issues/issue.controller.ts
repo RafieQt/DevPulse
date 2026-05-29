@@ -16,12 +16,13 @@ const createIssue = async (req: Request, res: Response) => {
         message: "Issue created successfully",
         data: result.rows[0],
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Something went wrong";
       sendResponse(res, {
         statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
         success: false,
-        message: error.message,
-        error: error,
+        message,
+        errors: error,
       });
     }
   }
@@ -42,12 +43,13 @@ const getAllIssues = async (req: Request, res: Response) => {
       message: "Issues retrived successfully",
       data: result,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Something went wrong";
     sendResponse(res, {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       success: false,
-      message: error.message,
-      error: error,
+      message,
+      errors: error,
     });
   }
 };
@@ -63,12 +65,13 @@ const getSingleIssue = async (req: Request, res: Response) => {
       message: "Issue retrived successfully",
       data: result,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Something went wrong";
     sendResponse(res, {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       success: false,
-      message: error.message,
-      error: error,
+      message,
+      errors: error,
     });
   }
 };
@@ -88,12 +91,13 @@ const updateIssue = async (req: Request, res: Response) => {
       message: "Issue updated successfully",
       data: result.rows[0],
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Something went wrong";
     sendResponse(res, {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       success: false,
-      message: error.message,
-      error: error,
+      message,
+      errors: error,
     });
   }
 };
@@ -108,12 +112,13 @@ const deleteIssue = async (req: Request, res: Response) => {
       success: true,
       message: "Issue deleted successfully",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Something went wrong";
     sendResponse(res, {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       success: false,
-      message: error.message,
-      error: error,
+      message,
+      errors: error,
     });
   }
 };
