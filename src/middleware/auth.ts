@@ -4,6 +4,7 @@ import jwt, { type JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import { pool } from "../db";
 import type { TDecodedUser } from "../modules/issues/issue.interface";
+import { StatusCodes } from "http-status-codes";
 
 type ROLES = "maintainer" | "contributor";
 const auth = (...roles: ROLES[]) => {
@@ -13,10 +14,11 @@ const auth = (...roles: ROLES[]) => {
 
       if (!token) {
         sendResponse(res, {
-          statusCode: 401,
+          statusCode: StatusCodes.UNAUTHORIZED,
           success: false,
           message: "Unauthorized Access!",
         });
+        return;
       }
       const decode = jwt.verify(
         token as string,
@@ -33,10 +35,12 @@ const auth = (...roles: ROLES[]) => {
       const user = userData.rows[0];
 
       if (roles.length && !roles.includes(user.role)) {
-        res.status(403).json({
+        sendResponse(res,{
+          statusCode: StatusCodes.FORBIDDEN,
           success: false,
-          message: "Forbidden!",
-        });
+          message: "Forbidden Entry!"
+        })
+        return;
       }
 
       req.user = decode;
