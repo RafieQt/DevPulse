@@ -24,7 +24,6 @@ const auth = (...roles: ROLES[]) => {
         token as string,
         config.jwtSecret as string,
       ) as TDecodedUser;
-      console.log("decided ", decode);
 
       const userData = await pool.query(
         `

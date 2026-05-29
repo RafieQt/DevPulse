@@ -11,7 +11,7 @@ const createIssue = async (req: Request, res: Response) => {
       const result = await issueService.CreateIssueBD(req.body, req.user);
 
       sendResponse(res, {
-        statusCode: StatusCodes.OK,
+        statusCode: StatusCodes.CREATED,
         success: true,
         message: "Issue created successfully",
         data: result.rows[0],

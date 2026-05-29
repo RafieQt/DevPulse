@@ -24,46 +24,40 @@ const getAllIssuesDB = async (payload: TIssueQuery) => {
   const conditions: string[] = [];
   const values: string[] = [];
 
-  // filter by type
   if (type) {
     conditions.push(`type = $${values.length + 1}`);
 
     values.push(type);
   }
 
-  // filter by status
   if (status) {
     conditions.push(`status = $${values.length + 1}`);
 
     values.push(status);
   }
 
-  // add WHERE condition
+
   if (conditions.length > 0) {
     query += ` WHERE ` + conditions.join(" AND ");
   }
 
-  // sorting
   if (sort === "oldest") {
     query += ` ORDER BY created_at ASC`;
   } else {
     query += ` ORDER BY created_at DESC`;
   }
 
-  // get all issues
   const issuesResult = await pool.query(query, values);
 
   const issues = issuesResult.rows;
 
-  // if no issues found
+
   if (issues.length === 0) {
     return [];
   }
 
-  // get all reporter ids
   const reporterIds = issues.map((issue) => issue.reporter_id);
 
-  // get reporter info WITHOUT JOIN
   const usersResult = await pool.query(
     `
     SELECT id, name, role
@@ -73,14 +67,13 @@ const getAllIssuesDB = async (payload: TIssueQuery) => {
     [reporterIds],
   );
 
-  // create user map
   const userMap = new Map();
 
   usersResult.rows.forEach((user) => {
     userMap.set(user.id, user);
   });
 
-  // attach reporter info manually
+
   const finalData = issues.map((issue) => ({
     id: issue.id,
     title: issue.title,
@@ -93,7 +86,7 @@ const getAllIssuesDB = async (payload: TIssueQuery) => {
     created_at: issue.created_at,
     updated_at: issue.updated_at,
   }));
-  console.log(finalData);
+  
   return finalData;
 };
 
@@ -160,7 +153,7 @@ const updateIssueDB = async (
     throw new Error("Issue not found");
   }
 
-  // contributor restrictions only
+ 
   if (role === "contributor") {
     if (issue.reporter_id !== id) {
       throw new Error("Unauthorized Access!");
